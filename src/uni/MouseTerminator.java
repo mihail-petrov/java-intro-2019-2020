@@ -24,6 +24,13 @@ public class MouseTerminator {
 		} while (true);
 	}
 
+	/**
+	 * Търси мишка и предприема нужното действие
+	 *
+	 * @param currentBatteryPower текущия заряд на батерията
+	 * @param random помощния обект за генериране на случайни числа
+	 * @return оставащия заряд на батерията след изпълнението на действието
+	 */
 	public static byte lookForMouse(byte currentBatteryPower, Random random) {
 		if (isMouseDetected(random)) {
 			System.out.println("Мишка на прицел!!!");

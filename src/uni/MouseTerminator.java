@@ -31,8 +31,12 @@ public class MouseTerminator {
 
 					if (hasBatteryPower(batteryPower)) {
 						System.out.printf("Има заряд: %d!\n", batteryPower);
+
 						batteryPower--;
+
 						System.out.println("Мишката е ТЕРМИНИРАНА!");
+
+						greetOwner();
 					} else {
 						System.out.println("Ups! Няма ток в батерята! Ще зареждаме.");
 					}
@@ -44,6 +48,21 @@ public class MouseTerminator {
 		} while (active);
 
 		scanner.close();
+	}
+
+	/**
+	 * Извежда поздрав към собственика за поредната елиминирана мишка.
+	 */
+	public static void greetOwner() {
+		for (byte i = 10; i > 0; i--) {
+			System.out.print(i);
+
+			if (i % 2 == 0) {
+				System.out.println(": I am a Robottttt");
+			} else {
+				System.out.println();
+			}
+		}
 	}
 
 	/**

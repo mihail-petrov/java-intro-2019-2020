@@ -12,6 +12,7 @@ public class MouseTerminator {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		Random random = new Random();
+		byte batteryPower = 4;
 
 		boolean active = true;
 
@@ -27,6 +28,14 @@ public class MouseTerminator {
 					System.out.println("Ударът ще е разрушителен. Стоп на операцията!");
 				} else {
 					System.out.println("Ударът ще унищожи само мишката.");
+
+					if (hasBatteryPower(batteryPower)) {
+						System.out.printf("Има заряд: %d!\n", batteryPower);
+						batteryPower--;
+						System.out.println("Мишката е ТЕРМИНИРАНА!");
+					} else {
+						System.out.println("Ups! Няма ток в батерята! Ще зареждаме.");
+					}
 				}
 
 			} else {
@@ -35,6 +44,16 @@ public class MouseTerminator {
 		} while (active);
 
 		scanner.close();
+	}
+
+	/**
+	 * Определя дали роботът има заряд в батерията за поне още един удар.
+	 *
+	 * @param currentBatteryPower текущия заряд на батерията
+	 * @return {@code true} ако има достатъчно заряд за още един удар, иначе - {@code false}
+	 */
+	public static boolean hasBatteryPower(int currentBatteryPower) {
+		return currentBatteryPower > 0;
 	}
 
 	/**

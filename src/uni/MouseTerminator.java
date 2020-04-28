@@ -16,9 +16,30 @@ public class MouseTerminator {
 			System.out.println(
 					String.format("Следващата команда е: %s", findNextCommand(scanner))
 			);
+
+			if (isMouseDetected(scanner)) {
+				System.out.println("Мишка на прицел!!!");
+			} else {
+				System.out.println("Няма мишка :(");
+			}
 		} while (active);
 
 		scanner.close();
+	}
+
+	/**
+	 * Определя дали мишката е на прицел, като проверява дали броя на пикселите в околната среда
+	 * са четно число.
+	 *
+	 * @param scanner Вход за броя на пикслеите
+	 * @return {@code true} ако мишката е на прицел, иначе {@code false}.
+	 */
+	public static boolean isMouseDetected(Scanner scanner) {
+		System.out.print("Броя пиксели: ");
+		long pixels = scanner.nextLong();
+		scanner.nextLine();
+
+		return pixels % 2 == 0;
 	}
 
 	/**

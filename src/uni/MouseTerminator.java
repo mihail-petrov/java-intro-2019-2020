@@ -39,6 +39,12 @@ public class MouseTerminator {
 						greetOwner();
 					} else {
 						System.out.println("Ups! Няма ток в батерята! Ще зареждаме.");
+
+						findSocketWithPower(random);
+
+						batteryPower = 4;
+
+						System.out.printf("Батерията е заредена. Ниво: %d!\n", batteryPower);
 					}
 				}
 
@@ -48,6 +54,35 @@ public class MouseTerminator {
 		} while (active);
 
 		scanner.close();
+	}
+
+	/**
+	 * Търси контакт с напрежение. Методът приключва изпълнението си едва когато намери такъв
+	 * контакт.
+	 * @param random - помощен обект за генериране на случайни числа
+	 */
+	public static void findSocketWithPower(Random random) {
+		int firstNumber;
+		int secondNumber;
+
+		do {
+			firstNumber = random.nextInt(1000) + 1;
+			secondNumber = random.nextInt(1000) + 1;
+
+			if (!hasPowerInSocket(firstNumber, secondNumber)) {
+				System.out.println("Намерих контакт, но без напрежение :(");
+			}
+		} while (!hasPowerInSocket(firstNumber, secondNumber));
+
+		System.out.println("Ура! Намерих контакт с напрежение!");
+	}
+
+	/**
+	 * Определя дали има напрежение в контакта
+	 * @return {@code true} ако има напрежение, иначе - {@code false}
+	 */
+	public static boolean hasPowerInSocket(int firstNumber, int secondNumber) {
+		return firstNumber > secondNumber;
 	}
 
 	/**

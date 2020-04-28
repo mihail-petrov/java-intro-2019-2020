@@ -1,5 +1,6 @@
 package uni;
 
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -10,6 +11,8 @@ import java.util.Scanner;
 public class MouseTerminator {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
+		Random random = new Random();
+
 		boolean active = true;
 
 		do {
@@ -19,12 +22,33 @@ public class MouseTerminator {
 
 			if (isMouseDetected(scanner)) {
 				System.out.println("Мишка на прицел!!!");
+
+				if (isHitTooFatal(random)) {
+					System.out.println("Ударът ще е разрушителен. Стоп на операцията!");
+				} else {
+					System.out.println("Ударът ще унищожи само мишката.");
+				}
+
 			} else {
 				System.out.println("Няма мишка :(");
 			}
 		} while (active);
 
 		scanner.close();
+	}
+
+	/**
+	 * Определя дали предстоящия удар ще е разрушителен за мебелите.
+	 *
+	 * @param random помощен обект за генериране на случайни числа в цялото приложение
+	 * @return {@code true} ако ударът ще е разрушителен, иначе - {@code false}
+	 */
+	public static boolean isHitTooFatal(Random random) {
+		final int FATAL_HIT = 5;
+
+		int hit = random.nextInt(10) + 1;
+
+		return hit == FATAL_HIT;
 	}
 
 	/**

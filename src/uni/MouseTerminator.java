@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 /**
  * Имплементация на Домашна работа 3
+ *
  * @author Emil Doychev
  * @author Konstantin Rusev
  */
@@ -14,46 +15,71 @@ public class MouseTerminator {
 		Random random = new Random();
 		byte batteryPower = 4;
 
-		boolean active = true;
-
 		do {
-			System.out.println(
-					String.format("Следващата команда е: %s", findNextCommand(scanner))
-			);
+			System.out.printf("Следващата команда е: %s \n", findNextCommand(scanner));
 
-			if (isMouseDetected(scanner)) {
-				System.out.println("Мишка на прицел!!!");
+			batteryPower = lookForMouse(scanner, batteryPower, random);
+		} while (true);
+	}
 
-				if (isHitTooFatal(random)) {
-					System.out.println("Ударът ще е разрушителен. Стоп на операцията!");
-				} else {
-					System.out.println("Ударът ще унищожи само мишката.");
+	public static byte lookForMouse(Scanner scanner, byte currentBatteryPower, Random random) {
+		if (isMouseDetected(scanner)) {
+			System.out.println("Мишка на прицел!!!");
 
-					if (hasBatteryPower(batteryPower)) {
-						System.out.printf("Има заряд: %d!\n", batteryPower);
+			return tryToKillIt(currentBatteryPower, random);
+		}
 
-						batteryPower--;
+		System.out.println("Няма мишка :(");
 
-						System.out.println("Мишката е ТЕРМИНИРАНА!");
+		return currentBatteryPower;
+	}
 
-						greetOwner();
-					} else {
-						System.out.println("Ups! Няма ток в батерята! Ще зареждаме.");
+	/**
+	 * Опитва се да нанесе удар за елиминиране на мишката. Ако ударът ще е разрушителен за мебелите не извършва никакво
+	 * действие. В противен случай нанася удара ако има батерия или отива да зарежда батерията ако е празна.
+	 *
+	 * @param currentBatteryPower текущия заряд на батерията
+	 * @param random помощния обект за генериране на случайни числа
+	 * @return оставащия заряд на батерията след изпълнението на действието
+	 */
+	public static byte tryToKillIt(byte currentBatteryPower, Random random) {
+		if (isHitTooFatal(random)) {
+			System.out.println("Ударът ще е разрушителен. Стоп на операцията!");
 
-						findSocketWithPower(random);
+			return currentBatteryPower;
+		}
 
-						batteryPower = 4;
+		System.out.println("Ударът ще унищожи само мишката.");
 
-						System.out.printf("Батерията е заредена. Ниво: %d!\n", batteryPower);
-					}
-				}
+		return performAction(currentBatteryPower, random);
+	}
 
-			} else {
-				System.out.println("Няма мишка :(");
-			}
-		} while (active);
+	/**
+	 * Извършва следващото възможно действие - ако има заряд премахва мишката от този свят и поздравява собственика.
+	 * Ако няма заряд в батерията - търси контакт с напрежение и зарежда батерията.
+	 *
+	 * @param currentBatteryPower текущия заряд на батерията
+	 * @param random помощния обект за генериране на случайни числа
+	 * @return оставащия заряд на батерията след изпълнението на действието
+	 */
+	public static byte performAction(byte currentBatteryPower, Random random) {
+		if (hasBatteryPower(currentBatteryPower)) {
+			System.out.printf("Има заряд: %d!\n", currentBatteryPower);
 
-		scanner.close();
+			System.out.println("Мишката е ТЕРМИНИРАНА!");
+
+			greetOwner();
+
+			return (byte)(currentBatteryPower - 1);
+		}
+
+		System.out.println("Ups! Няма ток в батерята! Ще зареждаме.");
+
+		findSocketWithPower(random);
+
+		System.out.println("Батерията е заредена.");
+
+		return 4;
 	}
 
 	/**

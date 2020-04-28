@@ -16,7 +16,7 @@ public class MouseTerminator {
 		byte batteryPower = 4;
 
 		do {
-			System.out.printf("Следващата команда е: %s \n", findNextCommand(scanner));
+			System.out.printf("Следващата команда е: %s \n", findNextCommand(random));
 
 			batteryPower = lookForMouse(scanner, batteryPower, random);
 		} while (true);
@@ -176,26 +176,32 @@ public class MouseTerminator {
 	 * </ul>
 	 *
 	 * <p>Ако препятствието не може да бъде разпознато се изчаква въвеждане на познато препятствие.</p>
-	 * @param scanner Вход за препятствията
+	 * @param random Помощен обект за генериране на случайни числа
 	 * @return командата
 	 */
-	public static String findNextCommand(Scanner scanner) {
+	public static String findNextCommand(Random random) {
 		final String OBSTACLE_WALL  = "стена";
 		final String OBSTACLE_CHAIR = "стол";
-		final String NO_OBSTACLE    = "";
+		final String NO_OBSTACLE    = "няма препятствие";
 
 		do {
 			System.out.print("Препятствие: ");
-			String obstacle = scanner.nextLine();
 
-			switch (obstacle.toLowerCase()) {
-				case OBSTACLE_WALL  : return "Go Sideway";
-				case OBSTACLE_CHAIR : return "Jump";
-				case NO_OBSTACLE    : return "Forward";
+			int obstacleNumber = random.nextInt(3);
+
+			switch (obstacleNumber) {
+				case 2 :
+					System.out.println(OBSTACLE_WALL);
+					return "Go Sideway";
+				case 1 :
+					System.out.println(OBSTACLE_CHAIR);
+					return "Jump";
+				case 0 :
+					System.out.println(NO_OBSTACLE);
+					return "Forward";
 			    default:
 					System.out.println("Непознато препятствие. Upgrade the robot.");
 			}
 		} while (true);
-
 	}
 }

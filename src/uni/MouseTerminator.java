@@ -1,7 +1,6 @@
 package uni;
 
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Имплементация на Домашна работа 3
@@ -10,20 +9,23 @@ import java.util.Scanner;
  * @author Konstantin Rusev
  */
 public class MouseTerminator {
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
+	public static void main(String[] args) throws InterruptedException {
 		Random random = new Random();
 		byte batteryPower = 4;
 
 		do {
 			System.out.printf("Следващата команда е: %s \n", findNextCommand(random));
 
-			batteryPower = lookForMouse(scanner, batteryPower, random);
+			batteryPower = lookForMouse(batteryPower, random);
+
+			Thread.sleep(2000);
+
+			System.out.println("-----------------------");
 		} while (true);
 	}
 
-	public static byte lookForMouse(Scanner scanner, byte currentBatteryPower, Random random) {
-		if (isMouseDetected(scanner)) {
+	public static byte lookForMouse(byte currentBatteryPower, Random random) {
+		if (isMouseDetected(random)) {
 			System.out.println("Мишка на прицел!!!");
 
 			return tryToKillIt(currentBatteryPower, random);
@@ -154,13 +156,12 @@ public class MouseTerminator {
 	 * Определя дали мишката е на прицел, като проверява дали броя на пикселите в околната среда
 	 * са четно число.
 	 *
-	 * @param scanner Вход за броя на пикслеите
+	 * @param random Помощен обект за генериране на случайни числа
 	 * @return {@code true} ако мишката е на прицел, иначе {@code false}.
 	 */
-	public static boolean isMouseDetected(Scanner scanner) {
-		System.out.print("Броя пиксели: ");
-		long pixels = scanner.nextLong();
-		scanner.nextLine();
+	public static boolean isMouseDetected(Random random) {
+		long pixels = random.nextLong();
+		System.out.printf("Броя пиксели: %d \n", pixels);
 
 		return pixels % 2 == 0;
 	}

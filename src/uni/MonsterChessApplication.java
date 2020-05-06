@@ -8,12 +8,12 @@ public class MonsterChessApplication {
 	public static final String FIG_QUEEN       = "Q ";
 	public static final String FIG_KING        = "K ";
 	public static final String FIG_GUN         = "M ";
-	public static final String EMPTY_POSITION  = " X ";
+	public static final String EMPTY_POSITION  = "   ";
 	public static final char   WHITE           = 'w';
 	public static final char   BLACK           = 'b';
-	public static final String COL_DIVIDER     = " + ";
+	public static final String COL_DIVIDER     = " | ";
 	public static final String ROW_DIVIDER     = "=====================================";
-	public static final String V_SIGN_DIVIDER  = " | ";
+	public static final String V_SIGN_DIVIDER  = " " + (char)0x2551 + " ";
 	public static final char   START_LABEL     = 'A';
 
 	public static final Scanner scanner = new Scanner(System.in);
@@ -21,6 +21,8 @@ public class MonsterChessApplication {
 	public static final boolean[] isBlackDwarfInStraightDirection = { true, true };
 
 	public static int movesCounter = 0;
+
+	public static boolean gameOver = false;
 
 	public static void main(String[] args) {
 
@@ -30,7 +32,7 @@ public class MonsterChessApplication {
 				{EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION},
 				{EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION},
 				{EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION, EMPTY_POSITION},
-				{getFigSign(BLACK, FIG_DWARF), getFigSign(BLACK, FIG_DONKEY), getFigSign(BLACK, FIG_QUEEN), getFigSign(BLACK, FIG_KING), getFigSign(BLACK, FIG_GUN), getFigSign(BLACK, FIG_DWARF)}
+				{getFigSign(BLACK, FIG_DWARF), getFigSign(BLACK, FIG_DONKEY), getFigSign(BLACK, FIG_KING), getFigSign(BLACK, FIG_QUEEN), getFigSign(BLACK, FIG_GUN), getFigSign(BLACK, FIG_DWARF)}
 		};
 		boolean isWhiteTurn = true;
 
@@ -54,9 +56,14 @@ public class MonsterChessApplication {
 			moveFigure(board, moveCoordinates);
 
 			isWhiteTurn = !isWhiteTurn;
-		} while(true);
+		} while(!gameOver);
 
-		// scanner.close();
+		print(board);
+
+		println("ШАХ И МАТ НА %s", isWhiteTurn?"БЕЛИТЕ":"ЧЕРНИТЕ");
+		println("ПОБЕДА ЗА %s", isWhiteTurn?"ЧЕРНИТЕ":"БЕЛИТЕ");
+
+		scanner.close();
 	}
 
 	/**
@@ -77,6 +84,22 @@ public class MonsterChessApplication {
 		}
 
 		setDwarfDirection(figure, coords[2], coords[3], board.length);
+
+		if (isKing(target)) {
+			gameOver = true;
+		}
+	}
+
+	/**
+	 * Определя дали фигурата е цар.
+	 *
+	 * @param figure фигурата
+	 * @return true ако фигурата е цар
+	 */
+	public static boolean isKing(String figure) {
+		String figureType = figure.substring(1);
+
+		return figureType.equals(FIG_KING);
 	}
 
 	/**
@@ -180,8 +203,12 @@ public class MonsterChessApplication {
 		String figure = board[startVCoord][startHCoord].substring(1);
 
 		switch (figure) {
-			case FIG_DWARF: return isValidDwarfMove(board, isWhiteTurn, startHCoord, startVCoord, targetHCoord, targetVCoord);
+			case FIG_DWARF:  return isValidDwarfMove(board, isWhiteTurn, startHCoord, startVCoord, targetHCoord, targetVCoord);
 		    case FIG_DONKEY: return isValidDonkeyMove(startHCoord, startVCoord, targetHCoord, targetVCoord);
+   		    case FIG_KING:   return isValidKingMove(startHCoord, startVCoord, targetHCoord, targetVCoord);
+			case FIG_QUEEN:  return isValidQueenMove(startHCoord, startVCoord, targetHCoord, targetVCoord);
+			case FIG_GUN:    return isValidMachineGunMove(startHCoord, startVCoord, targetHCoord, targetVCoord);
+
 			default: return false;
 		}
 	}
@@ -252,19 +279,92 @@ public class MonsterChessApplication {
 		}
 	}
 
+	/**
+	 * Проверява дали хода на магарето е валиден
+	 *
+	 * @param startHCoord хоризонталната координата на магарето
+	 * @param startVCoord вертикалната координата на магарето
+	 * @param targetHCoord хоризонталната координата на целевата позиция
+	 * @param targetVCoord вертикалната координата на целевата позиция
+	 * @return true ако хода на магарето е валиден
+	 */
 	public static boolean isValidDonkeyMove(int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
 		if (movesCounter % 3 != 0) {
 			return false;
 		}
 
+		return isValidOffsetMove(2, true, true, startHCoord, startVCoord, targetHCoord, targetVCoord);
+	}
+
+	/**
+	 * Проверява дали хода на царя е валиден
+	 *
+	 * @param startHCoord хоризонталната координата на царя
+	 * @param startVCoord вертикалната координата на царя
+	 * @param targetHCoord хоризонталната координата на целевата позиция
+	 * @param targetVCoord вертикалната координата на целевата позиция
+	 * @return true ако хода на царя е валиден
+	 */
+	public static boolean isValidKingMove(int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
+		return isValidOffsetMove(1, true, true, startHCoord, startVCoord, targetHCoord, targetVCoord);
+	}
+
+	/**
+	 * Проверява дали хода на царицата е валиден
+	 *
+	 * @param startHCoord хоризонталната координата на царицата
+	 * @param startVCoord вертикалната координата на царицата
+	 * @param targetHCoord хоризонталната координата на целевата позиция
+	 * @param targetVCoord вертикалната координата на целевата позиция
+	 * @return true ако хода на царицата е валиден
+	 */
+	public static boolean isValidQueenMove(int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
+		return isValidOffsetMove(1, false, true, startHCoord, startVCoord, targetHCoord, targetVCoord);
+	}
+
+	/**
+	 * Проверява дали хода на картечницата е валиден
+	 *
+	 * @param startHCoord хоризонталната координата на картечницата
+	 * @param startVCoord вертикалната координата на картечницата
+	 * @param targetHCoord хоризонталната координата на целевата позиция
+	 * @param targetVCoord вертикалната координата на целевата позиция
+	 * @return true ако хода на картечницата е валиден
+	 */
+	public static boolean isValidMachineGunMove(int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
+		return isValidOffsetMove(1, true, false, startHCoord, startVCoord, targetHCoord, targetVCoord);
+	}
+
+	/**
+	 * Определя дали хода е валиден за определно отместване във всички посоки. Ако няма отместване и в двете посоки -
+	 * хоризонтална и вертикална - резултата е {@code false}.
+	 *
+	 * @param validOffset валидното отместване
+	 * @param allowCross допустимо ли е отместване само по ред или колона
+	 * @param allowDiagonal допустимо ли е отместване по диагонал
+	 * @param startHCoord хоризонталната координата на фигурата
+	 * @param startVCoord вертикалната координата на фигурата
+	 * @param targetHCoord хоризонталната координата на целевата позиция
+	 * @param targetVCoord вертикалната координата на целевата позиция
+	 * @return true ако отместването спрямо началната позиция е валидно
+	 */
+	public static boolean isValidOffsetMove(int validOffset, boolean allowCross, boolean allowDiagonal, int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
 		int vHops = Math.abs(startVCoord - targetVCoord);
 		int hHops = Math.abs(startHCoord - targetHCoord);
 
-		if (vHops == 2 || vHops == 0 || hHops == 2 || hHops == 0) {
-			return true;
+		if (!allowCross && !allowDiagonal) {
+			return false;
 		}
 
-		return false;
+		if (!allowCross && (vHops == 0 || hHops == 0)) {
+			return false;
+		}
+
+		if (!allowDiagonal && (vHops == validOffset && hHops == validOffset)) {
+			return false;
+		}
+
+		return (vHops == validOffset || vHops == 0 || hHops == validOffset || hHops == 0) && !(vHops == 0 && hHops == 0);
 	}
 
 	/**

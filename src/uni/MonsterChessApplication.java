@@ -20,6 +20,8 @@ public class MonsterChessApplication {
 	public static final boolean[] isWhiteDwarfInStraightDirection = { true, true };
 	public static final boolean[] isBlackDwarfInStraightDirection = { true, true };
 
+	public static int movesCounter = 0;
+
 	public static void main(String[] args) {
 
 		String[][] board = {
@@ -37,6 +39,10 @@ public class MonsterChessApplication {
 
 		do {
 			print(board);
+
+			if (isWhiteTurn) {
+				movesCounter++;
+			}
 
 			println("На ход са %s фигури.", isWhiteTurn?"белите":"черните");
 
@@ -110,6 +116,14 @@ public class MonsterChessApplication {
 		}
 	}
 
+	/**
+	 * Прочита координати на фигурата и на целевата позиция и ако не съответстват на валиден ход за фигурата - изисква
+	 * ново въвеждане.
+	 *
+	 * @param board диската
+	 * @param isWhiteTurn определя дали белите фигури са на ход
+	 * @return масив от 4 координати - на фигурата (0, 1) и на целевата позиция (2, 3)
+	 */
 	public static int[] readValidCoordinates(String[][] board, boolean isWhiteTurn) {
 		int[] coords = {};
 		boolean validMove = false;
@@ -135,7 +149,7 @@ public class MonsterChessApplication {
 	 * @param startVCoord вертикалната координата на фигурата
 	 * @param targetHCoord хоризонталната координата на целевата позиция
 	 * @param targetVCoord вертикалната координата на целевата позиция
-	 * @return true ако хода е валиде и може да бъде изпълнен, иначе - false
+	 * @return true ако хода е валиден и може да бъде изпълнен, иначе - false
 	 */
 	public static boolean isValidMove(String[][] board, boolean isWhiteTurn, int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
 		return isValidStartPosition(board, isWhiteTurn, startHCoord, startVCoord) &&
@@ -143,8 +157,23 @@ public class MonsterChessApplication {
 
 	}
 
+	/**
+	 * Определя дали целевата позиция е валидна за фигурата.
+	 *
+	 * @param board дъската
+	 * @param isWhiteTurn задава дали белите фигури са на ход
+	 * @param startHCoord хоризонталната координата на фигурата
+	 * @param startVCoord вертикалната координата на фигурата
+	 * @param targetHCoord хоризонталната координата на целевата позиция
+	 * @param targetVCoord вертикалната координата на целевата позиция
+	 * @return true ако хода е валиден и може да бъде изпълнен, иначе - false
+	 */
 	public static boolean isValidTargetPosition(String[][] board, boolean isWhiteTurn, int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
 		if (!isPositionWithinBoard(board, targetHCoord, targetVCoord)) {
+			return false;
+		}
+
+		if (isPositionColored(board, isWhiteTurn, targetHCoord, targetVCoord)) {
 			return false;
 		}
 
@@ -152,10 +181,51 @@ public class MonsterChessApplication {
 
 		switch (figure) {
 			case FIG_DWARF: return isValidDwarfMove(board, isWhiteTurn, startHCoord, startVCoord, targetHCoord, targetVCoord);
+		    case FIG_DONKEY: return isValidDonkeyMove(startHCoord, startVCoord, targetHCoord, targetVCoord);
 			default: return false;
 		}
 	}
 
+	/**
+	 * Определя дали в позицията, зададена с координатите {@code hCoord} и {@code vCoord} има фигура от цвета
+	 * определен с флага {@code isWhiteTurn}.
+	 *
+	 * @param board дъската
+	 * @param isWhiteTurn определя дали белите фигури са на ход
+	 * @param hCoord хоризонталната позиция на фигурата
+	 * @param vCoord вертикалната позиция на фигурата
+	 * @return true ако в указаната позиция има фигура съответстваща на флага {@code isWhiteTurn}
+	 */
+	public static boolean isPositionColored(String[][] board, boolean isWhiteTurn, int hCoord, int vCoord) {
+		String figure = board[vCoord][hCoord];
+		char colorPrefix = figure.charAt(0);
+
+		if (figure.equals(EMPTY_POSITION)) {
+			return false;
+		}
+
+		if (isWhiteTurn && (colorPrefix == WHITE)) {
+			return true;
+		}
+
+		if (!isWhiteTurn && (colorPrefix == BLACK)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Определя дали ходът е валиден за джудже.
+	 *
+	 * @param board дъската
+	 * @param isWhiteTurn задава дали белите фигури са на ход
+	 * @param startHCoord хоризонталната координата на джуджето
+	 * @param startVCoord вертикалната координата на джуджето
+	 * @param targetHCoord хоризонталната координата на целевата позиция
+	 * @param targetVCoord вертикалната координата на целевата позиция
+	 * @return true ако хода е валиден и може да бъде изпълнен, иначе - false
+	 */
 	public static boolean isValidDwarfMove(String[][] board, boolean isWhiteTurn, int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
 		if (startHCoord != targetHCoord) {
 			return false;
@@ -182,6 +252,21 @@ public class MonsterChessApplication {
 		}
 	}
 
+	public static boolean isValidDonkeyMove(int startHCoord, int startVCoord, int targetHCoord, int targetVCoord) {
+		if (movesCounter % 3 != 0) {
+			return false;
+		}
+
+		int vHops = Math.abs(startVCoord - targetVCoord);
+		int hHops = Math.abs(startHCoord - targetHCoord);
+
+		if (vHops == 2 || vHops == 0 || hHops == 2 || hHops == 0) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * <p>Определя дали позицията с коориднати {@code hCoord} и {@code vCoord} е валидна начална позиция на ход:</p>
 	 * <ul>
@@ -200,21 +285,7 @@ public class MonsterChessApplication {
 			return false;
 		}
 
-		String figure = board[vCoord][hCoord];
-
-		if (figure.equals(EMPTY_POSITION)) {
-			return false;
-		}
-
-		if (isWhiteTurn && (figure.charAt(0) == WHITE)) {
-			return true;
-		}
-
-		if (!isWhiteTurn && (figure.charAt(0) == BLACK)) {
-			return true;
-		}
-
-		return false;
+		return isPositionColored(board, isWhiteTurn, hCoord, vCoord);
 	}
 
 	/**

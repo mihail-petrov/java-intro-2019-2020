@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class AdministrationApplication {
 
     static final int INDEX_NOT_FOUND = -1;
@@ -11,15 +13,23 @@ public class AdministrationApplication {
         //renderCollection(sortCollectionInDescOrder(collection));
 
         // 3. Търсене на позиция на конкретно число
-        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-        renderCollection(sortCollectionInAscOrder(collection));
-        System.out.println(findIndexInCollection(collection, 5));
-        System.out.println(findIndexInCollection(collection, 8));
-        System.out.println(findIndexInCollection(collection, 7));
-        System.out.println(findIndexInCollection(collection,11));
-        System.out.println(findIndexInCollection(collection,0));
-        System.out.println(findIndexInCollection(collection, 66));
-        System.out.println(findIndexInCollection(collection, 67));
+//        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
+//        renderCollection(sortCollectionInAscOrder(collection));
+//        System.out.println(findIndexInCollection(collection, 5));
+//        System.out.println(findIndexInCollection(collection, 8));
+//        System.out.println(findIndexInCollection(collection, 7));
+//        System.out.println(findIndexInCollection(collection, 11));
+//        System.out.println(findIndexInCollection(collection, 0));
+//        System.out.println(findIndexInCollection(collection, 66));
+//        System.out.println(findIndexInCollection(collection, 67));
+
+        // 5.Разбъркване на числата
+//        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
+//        renderCollection(shuffleCollection(collection));
+//        renderCollection(shuffleCollection(collection));
+//        renderCollection(shuffleCollection(collection));
+//        renderCollection(shuffleCollection(collection));
+//        renderCollection(shuffleCollection(collection));
 
         // 11. Визуализирай въведените числа
         // int[] collection = new int[] {1,2,3,4,5,6,7,8,9,10};
@@ -75,7 +85,7 @@ public class AdministrationApplication {
     }
 
     public static int getBinarySearchMidIndex(int startIndex, int endIndex) {
-        return startIndex + (endIndex - startIndex)/ 2;
+        return startIndex + (endIndex - startIndex) / 2;
     }
 
     public static int findIndexInCollection(int[] collection, int serchableValue) {
@@ -84,27 +94,45 @@ public class AdministrationApplication {
         int startIndex = 0;
         int endIndex = collection.length;
 
-        while(startIndex < endIndex) {
+        while (startIndex < endIndex) {
 
             // 1 .
             // int midIndex = (sortedCollection.length / 2); // ?
             int midIndex = getBinarySearchMidIndex(startIndex, endIndex);
             int midValue = sortedCollection[midIndex];
 
-            if(serchableValue < midValue)  {
+            if (serchableValue < midValue) {
                 endIndex = midIndex;
             }
 
-            if(serchableValue > midValue)  {
+            if (serchableValue > midValue) {
                 startIndex = midIndex + 1;
             }
 
-            if(serchableValue == midValue) {
+            if (serchableValue == midValue) {
                 return midIndex;
             }
         }
 
         return INDEX_NOT_FOUND;
+    }
+
+    public static int[] shuffleCollection(int[] collection) {
+
+        int[] referenceCollection = copyCollection(collection);
+
+        Random randomGenerator = new Random();
+
+        for (int i = 0; i < referenceCollection.length; i++) {
+
+            int shuffalbleIndex = randomGenerator.nextInt(referenceCollection.length);
+            int shafflableElement = referenceCollection[shuffalbleIndex];
+            int initElement = referenceCollection[i];
+            referenceCollection[i] = shafflableElement;
+            referenceCollection[shuffalbleIndex] = initElement;
+        }
+
+        return referenceCollection;
     }
 
 

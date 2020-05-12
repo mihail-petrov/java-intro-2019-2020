@@ -32,12 +32,15 @@ public class AdministrationApplication {
 //        renderCollection(shuffleCollection(collection));
 
         // 6. Намиране на най-голямото число
-        // int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-        // System.out.println(findMax(collection));
+//         int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
+//         System.out.println(findMax(collection));
 
         // 7. Намиране на най-малкото число
 //        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
 //        System.out.println(findMin(collection));
+
+        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
+        System.out.println(averageOfCollection(collection));
 
         // 11. Визуализирай въведените числа
         // int[] collection = new int[] {1,2,3,4,5,6,7,8,9,10};
@@ -151,6 +154,14 @@ public class AdministrationApplication {
         }
 
         return sum;
+    }
+
+    public static double averageOfCollection(int[] collection) {
+
+        int collectionSum   = sumNumber(collection);
+        int length          = collection.length;
+
+        return collectionSum / (double)length;
     }
 
     public static int findLimit(int[] collection, boolean isLimitMin) {

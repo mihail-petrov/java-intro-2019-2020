@@ -39,8 +39,12 @@ public class AdministrationApplication {
 //        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
 //        System.out.println(findMin(collection));
 
-        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-        System.out.println(averageOfCollection(collection));
+//        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
+//        System.out.println(averageOfCollection(collection));
+
+        //int[] collection = new int[]{4,5,6,6,5,4};
+        int[] collection = new int[]{4,5,5,7,6,5,4};
+        System.out.println(isCollectionSymmetrical(collection));
 
         // 11. Визуализирай въведените числа
         // int[] collection = new int[] {1,2,3,4,5,6,7,8,9,10};
@@ -187,6 +191,18 @@ public class AdministrationApplication {
 
     public static int findMax(int[] collection) {
         return findLimit(collection, false);
+    }
+
+    public static boolean isCollectionSymmetrical(int[] collection) {
+
+        int i = 0;
+        int j = (collection.length - 1);
+        for(; i < j; i++, j--) {
+            if(collection[i] != collection[j]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void renderCollection(int[] collection) {

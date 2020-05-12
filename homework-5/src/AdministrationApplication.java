@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class AdministrationApplication {
 
@@ -6,49 +7,123 @@ public class AdministrationApplication {
 
     public static void main(String[] args) {
 
-        // 1. Сортиране на въведените числа във възходящ ред
-        // 2. Сортиране на въведените числа във визходящ ред
-        //int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-        //renderCollection(sortCollectionInAscOrder(collection));
-        //renderCollection(sortCollectionInDescOrder(collection));
+        Scanner inputScanner = new Scanner(System.in);
+        int countOfElements;
+        int menuOption;
+        boolean isRunning = true;
 
-        // 3. Търсене на позиция на конкретно число
-//        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-//        renderCollection(sortCollectionInAscOrder(collection));
-//        System.out.println(findIndexInCollection(collection, 5));
-//        System.out.println(findIndexInCollection(collection, 8));
-//        System.out.println(findIndexInCollection(collection, 7));
-//        System.out.println(findIndexInCollection(collection, 11));
-//        System.out.println(findIndexInCollection(collection, 0));
-//        System.out.println(findIndexInCollection(collection, 66));
-//        System.out.println(findIndexInCollection(collection, 67));
+        System.out.print("Въведете колко на брой числа ще въвеждате.");
+        countOfElements = inputScanner.nextInt();
+        int[] inputCollection = new int[countOfElements];
 
-        // 5.Разбъркване на числата
-//        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-//        renderCollection(shuffleCollection(collection));
-//        renderCollection(shuffleCollection(collection));
-//        renderCollection(shuffleCollection(collection));
-//        renderCollection(shuffleCollection(collection));
-//        renderCollection(shuffleCollection(collection));
+        for(int i = 0; i < countOfElements; i++) {
+            inputCollection[i] = readInputValue(inputScanner);
+        }
 
-        // 6. Намиране на най-голямото число
-//         int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-//         System.out.println(findMax(collection));
+        while(isRunning) {
 
-        // 7. Намиране на най-малкото число
-//        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-//        System.out.println(findMin(collection));
+            renderMenu();
+            menuOption = inputScanner.nextInt();
 
-//        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
-//        System.out.println(averageOfCollection(collection));
+            if (menuOption == 1) {
+                renderCollection(sortCollectionInAscOrder(inputCollection));
+            }
 
-        //int[] collection = new int[]{4,5,6,6,5,4};
-        int[] collection = new int[]{4,5,5,7,6,5,4};
-        System.out.println(isCollectionSymmetrical(collection));
+            if (menuOption == 2) {
+                renderCollection(sortCollectionInDescOrder(inputCollection));
+            }
 
-        // 11. Визуализирай въведените числа
-        // int[] collection = new int[] {1,2,3,4,5,6,7,8,9,10};
-        // renderCollection(collection);
+            if (menuOption == 3) {
+
+                System.out.print("Въведете числото, чиято позиция искате да намерите:");
+                int findInput       = inputScanner.nextInt();
+                int operationIndex  = findIndexInCollection(inputCollection, findInput);
+                String message      = (operationIndex == INDEX_NOT_FOUND) ? "Числото" + findInput + " не е намерено."
+                                                                          : "Числото" + findInput + " е намерено на позиция " + operationIndex;
+                System.out.println(message);
+            }
+
+            if (menuOption == 4) {
+                renderCollection(shuffleCollection(inputCollection));
+            }
+
+            if (menuOption == 5) {
+                System.out.println(sumNumber(inputCollection));
+            }
+
+            if (menuOption == 6) {
+                System.out.println(findMin(inputCollection));
+            }
+
+            if (menuOption == 7) {
+                System.out.println(findMax(inputCollection));
+            }
+
+            if (menuOption == 8) {
+                System.out.println(averageOfCollection(inputCollection));
+            }
+
+            if (menuOption == 9) {
+
+                String message = isCollectionSymmetrical(inputCollection) ? "Масивът е симетричен"
+                                                                          : "Масивът не е симетричен";
+                System.out.println(message);
+                renderCollection(inputCollection);
+            }
+
+            if (menuOption == 10) {
+                renderCollection(reverseCollection(inputCollection));
+            }
+
+            if (menuOption == 11) {
+                renderCollection(inputCollection);
+            }
+
+            if (menuOption == 12) {
+                isRunning = false;
+            }
+        }
+    }
+
+    public static int readInputValue(Scanner scannerReference) {
+
+        while(true) {
+
+            System.out.print("Въведете число по-голямо от нула и по-малко от 100:");
+            int input = scannerReference.nextInt();
+            if(input >= 0 && input <= 100) {
+                return input;
+            }
+
+            System.out.println("Ти тотално обърка всичко");
+        }
+    }
+
+    public static void renderMenu() {
+
+        System.out.println("1. Сортиране на въведените числа във възходящ ред");
+        System.out.println("2. Сортиране на въведените числа в низходящ ред");
+        System.out.println("3. Търсене на позиция на конкретно число");
+        System.out.println("4. Разбъркване на числата");
+        System.out.println("5. Изчисляване на сбора на всички числа");
+        System.out.println("6. Намиране на най-голямото число");
+        System.out.println("7. Намиране на най-малкото число");
+        System.out.println("8. Намиране средно-аритметично на числата");
+        System.out.println("9. Проверка за симетричност на масива от числа");
+        System.out.println("10. Обръщане на масива от числа");
+        System.out.println("11. Визуализирай въведените числа");
+        System.out.println("12. Изход");
+    }
+
+    private static int[] reverseCollection(int[] collection) {
+
+        int[] referenceCollection = new int[collection.length];
+        int i = collection.length - 1;
+        int j = 0;
+        for(; i >= 0; i--, j++) {
+            referenceCollection[j] = collection[i];
+        }
+        return referenceCollection;
     }
 
     public static int[] copyCollection(int[] collection) {

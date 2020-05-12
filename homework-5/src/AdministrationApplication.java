@@ -31,6 +31,14 @@ public class AdministrationApplication {
 //        renderCollection(shuffleCollection(collection));
 //        renderCollection(shuffleCollection(collection));
 
+        // 6. Намиране на най-голямото число
+        // int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
+        // System.out.println(findMax(collection));
+
+        // 7. Намиране на най-малкото число
+//        int[] collection = new int[]{5, 8, 66, 7, 9, 11, 0, -5, 6, 7, 4};
+//        System.out.println(findMin(collection));
+
         // 11. Визуализирай въведените числа
         // int[] collection = new int[] {1,2,3,4,5,6,7,8,9,10};
         // renderCollection(collection);
@@ -145,6 +153,30 @@ public class AdministrationApplication {
         return sum;
     }
 
+    public static int findLimit(int[] collection, boolean isLimitMin) {
+
+        int minElement = collection[0];
+        for(int i = 1; i < collection.length; i++) {
+
+            boolean isMinLimited = (isLimitMin && (minElement > collection[i]));
+            boolean isMaxLimited = (!isLimitMin && (minElement < collection[i]));
+            boolean isLimited = isMinLimited || isMaxLimited;
+
+            if(isLimited) {
+                minElement = collection[i];
+            }
+        }
+
+        return minElement;
+    }
+
+    public static int findMin(int[] collection) {
+        return findLimit(collection, true);
+    }
+
+    public static int findMax(int[] collection) {
+        return findLimit(collection, false);
+    }
 
     public static void renderCollection(int[] collection) {
 

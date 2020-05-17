@@ -1,6 +1,6 @@
 package uni;
 
-import uni.processors.NumbersProcessor;
+import uni.processors.NumberProcessor;
 
 import java.util.Scanner;
 
@@ -54,15 +54,20 @@ public class StateAdminV2 {
 	private static void executeNumbersMenu() {
 		int[] numbersArray = readNumbersArray();
 
-		int option = -1;
+		int option;
 
 		do {
 			option = getMenuOption("Работа с числа", numbersMenu);
 
 			switch (option) {
-				case 1: NumbersProcessor.printPrimeNumbers(numbersArray); break;
+				case 1: NumberProcessor.printPrimeNumbers(numbersArray); break;
+				case 2: NumberProcessor.printMostFrequentNumber(numbersArray); break;
+				case 3: NumberProcessor.printMaxIncSequence(numbersArray, NumberProcessor.CMP_LOWER); break;
+			    case 4: NumberProcessor.printMaxIncSequence(numbersArray, NumberProcessor.CMP_GREATER); break;
+			    case 5: NumberProcessor.printMaxIncSequence(numbersArray, NumberProcessor.CMP_EQUAL); break;
+				case 6: NumberProcessor.printSumSequence(numbersArray); break;
+				default: break;
 			}
-
 		} while (option != numbersMenu.length);
 	}
 

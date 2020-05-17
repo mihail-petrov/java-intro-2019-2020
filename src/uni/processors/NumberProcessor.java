@@ -27,15 +27,17 @@ public class NumberProcessor {
 	 * @param numbersArray масива
 	 */
 	public static void printMostFrequentNumber(int[] numbersArray) {
+		System.out.printf("Най-често срещаното число е: %d %n", getMostFrequentNumber(numbersArray));
+	}
+
+	public static int getMostFrequentNumber(int[] numbersArray) {
 		int[] frequencyArray = new int[10001];
 
 		for (int number: numbersArray) {
 			frequencyArray[number]++;
 		}
 
-		int mostFrequentNumber = getIndexOfMaxNumber(frequencyArray);
-
-		System.out.printf("Най-често срещаното число е: %d %n", mostFrequentNumber);
+		return getIndexOfMaxNumber(frequencyArray);
 	}
 
 	public static void printMaxIncSequence(int[] numbersArray, String compareOperation) {

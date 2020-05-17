@@ -1,6 +1,7 @@
 package uni;
 
 import uni.processors.NumberProcessor;
+import uni.processors.WordProcessor;
 
 import java.util.Scanner;
 
@@ -72,10 +73,20 @@ public class StateAdminV2 {
 	}
 
 	private static void executeWordsMenu() {
+		String[] wordsArray = readWordsArray();
+
 		int option = -1;
 
 		do {
 			option = getMenuOption("Работа с думи", wordsMenu);
+
+			switch (option) {
+				case 1:	WordProcessor.printReverseWordInArray(wordsArray); break;
+				case 2: WordProcessor.printNumberOfRepeatingCharsInWords(wordsArray); break;
+				case 3: WordProcessor.printWordsLength(wordsArray); break;
+				case 4: WordProcessor.printRepeatingWordsCount(wordsArray); break;
+				default: break;
+			}
 
 		} while (option != wordsMenu.length);
 	}
@@ -115,15 +126,37 @@ public class StateAdminV2 {
 		return count;
 	}
 
+	private static String readWord(String prompt) {
+		String word;
+		do {
+			System.out.print(prompt);
+			word = scanner.nextLine();
+		} while (word.length() > 20);
+
+		return word;
+	}
+
 	private static int[] readNumbersArray() {
 		int numbersCount = readInt("Въведете броя на числата: ", 1, 100);
 
 		int[] numbersArray = new int[numbersCount];
 
 		for (int i = 0; i < numbersArray.length; i++) {
-			numbersArray[i] = readInt(String.format("Въведете число [%d]: ", i), 0, 10000);
+			numbersArray[i] = readInt(String.format("Въведете число [%d]: ", i+1), 0, 10000);
 		}
 
 		return numbersArray;
+	}
+
+	private static String[] readWordsArray() {
+		int wordsCount = readInt("Въведете броя на думите: ", 1, 100);
+
+		String[] wordsArray = new String[wordsCount];
+
+		for (int i = 0; i < wordsArray.length; i++) {
+			wordsArray[i] = readWord(String.format("Въведете дума [%d]: ", i+1));
+		}
+
+		return wordsArray;
 	}
 }

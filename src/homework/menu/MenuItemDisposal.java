@@ -15,6 +15,7 @@ public class MenuItemDisposal extends MenuItem {
 		}
 
 		targetTile.disposalMine();
+		gameBoard.decDisposals();
 	}
 
 }

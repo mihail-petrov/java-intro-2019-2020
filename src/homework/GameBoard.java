@@ -1,5 +1,9 @@
 package homework;
 
+import homework.config.Configurations;
+import homework.config.EnemyTerritory;
+
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -12,22 +16,34 @@ public class GameBoard {
 	private final int height;
 	private int disposals;
 	private int probes;
+	private int mines;
 	private boolean boom;
 	private Tile startTile;
 	private Tile finishTile;
 	private Tile currentTile;
 
-	public GameBoard(int height, int width, int minesCount, int maxDisposals, int maxProbes) {
-		this.width = width;
-		this.height = height;
-		this.disposals = maxDisposals;
-		this.probes = maxProbes;
+	public GameBoard() throws IOException {
+		EnemyTerritory enemyTerritory = new EnemyTerritory();
+		Configurations configurations = new Configurations();
+
+		this.width = enemyTerritory.getWidth();
+		this.height = enemyTerritory.getHeight();
+		this.mines = enemyTerritory.getMinesCount();
+		this.disposals = configurations.getDisposalsCount();
+		this.probes = configurations.getProbesCount();
 		this.board = new Tile[height][width];
 
 		populateBoard();
 		setStartTile();
 		setFinishTile();
-		minelaying(minesCount);
+		minelaying(mines);
+	}
+
+	public void printBoardInfo() {
+		System.out.printf("Размери на полето      : %dx%d %n", height, width);
+		System.out.printf("Брой на мините         : %d %n", mines);
+		System.out.printf("Брой на опитите        : %d %n", probes);
+		System.out.printf("Брой на обезврежданията: %d %n", disposals);
 	}
 
 	private void populateBoard() {

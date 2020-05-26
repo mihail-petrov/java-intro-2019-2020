@@ -19,5 +19,6 @@ public class MenuItemProbe extends MenuItem {
 		if (targetTile.getDownNeighbor() != null) targetTile.getDownNeighbor().reveal();
 		if (targetTile.getRightNeighbor() != null) targetTile.getRightNeighbor().reveal();
 		if (targetTile.getLeftNeighbor() != null) targetTile.getLeftNeighbor().reveal();
+		gameBoard.decProbes();
 	}
 }

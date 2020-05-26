@@ -6,11 +6,11 @@ package homework;
 public class Tile {
 	private static final char SYM_START    = 'S';
 	private static final char SYM_FINISH   = 'F';
-	private static final char SYM_VISITED  = 'V';
-	private static final char SYM_HAS_MINE = 'Y';
-	private static final char SYM_NO_MINE  = 'N';
+	private static final char SYM_VISITED  = '#';
+	private static final char SYM_HAS_MINE = 'M';
+	private static final char SYM_NO_MINE  = 'O';
 	private static final char SYM_CURRENT  = '*';
-	private static final char SYM_UNKNOWN  = 'X';
+	private static final char SYM_UNKNOWN  = 'x';
 
 	private boolean start;
 	private boolean finish;
@@ -20,6 +20,10 @@ public class Tile {
 	private boolean current;
 	private final int row;
 	private final int col;
+	private Tile topNeighbor;
+	private Tile downNeighbor;
+	private Tile rightNeighbor;
+	private Tile leftNeighbor;
 
 	public Tile(int row, int col) {
 		this.row = row;
@@ -48,6 +52,10 @@ public class Tile {
 
 	public void setMine() {
 		this.mine = true;
+	}
+
+	public void disposalMine() {
+		this.mine = false;
 	}
 
 	public boolean isRevealed() {
@@ -104,5 +112,44 @@ public class Tile {
 		if (revealed && !mine) return SYM_NO_MINE;
 
 		return SYM_UNKNOWN;
+	}
+
+	public Tile getTopNeighbor() {
+		return topNeighbor;
+	}
+
+	public void setTopNeighbor(Tile topNeighbor) {
+		this.topNeighbor = topNeighbor;
+	}
+
+	public Tile getDownNeighbor() {
+		return downNeighbor;
+	}
+
+	public void setDownNeighbor(Tile downNeighbor) {
+		this.downNeighbor = downNeighbor;
+	}
+
+	public Tile getRightNeighbor() {
+		return rightNeighbor;
+	}
+
+	public void setRightNeighbor(Tile rightNeighbor) {
+		this.rightNeighbor = rightNeighbor;
+	}
+
+	public Tile getLeftNeighbor() {
+		return leftNeighbor;
+	}
+
+	public void setLeftNeighbor(Tile leftNeighbor) {
+		this.leftNeighbor = leftNeighbor;
+	}
+
+	public boolean isNeighbor(Tile targetTile) {
+		return  this.topNeighbor == targetTile ||
+			    this.downNeighbor == targetTile ||
+				this.rightNeighbor == targetTile ||
+				this.leftNeighbor == targetTile;
 	}
 }

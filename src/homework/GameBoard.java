@@ -6,17 +6,24 @@ import java.util.Random;
  * Игралното поле
  */
 public class GameBoard {
-	private Tile[][] board;
-	private Random random = new Random();
-	private int width;
-	private int height;
+	private final Tile[][] board;
+	private final Random random = new Random();
+	private final int width;
+	private final int height;
+	private int disposals;
+	private int probes;
+	private boolean boom;
 	private Tile startTile;
 	private Tile finishTile;
+	private Tile currentTile;
 
-	public GameBoard(int height, int width, int minesCount) {
-		board = new Tile[height][width];
+	public GameBoard(int height, int width, int minesCount, int maxDisposals, int maxProbes) {
 		this.width = width;
 		this.height = height;
+		this.disposals = maxDisposals;
+		this.probes = maxProbes;
+		this.board = new Tile[height][width];
+
 		populateBoard();
 		setStartTile();
 		setFinishTile();
@@ -29,12 +36,27 @@ public class GameBoard {
 				board[i][j] = new Tile(i, j);
 			}
 		}
+
+		wireTiles();
+	}
+
+	private void wireTiles() {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				board[i][j].setTopNeighbor(getTile(i - 1, j));
+				board[i][j].setDownNeighbor(getTile(i + 1, j));
+				board[i][j].setRightNeighbor(getTile(i, j + 1));
+				board[i][j].setLeftNeighbor(getTile(i, j - 1));
+			}
+		}
 	}
 
 	private void setStartTile() {
 		this.startTile = getSpecialTile();
 		startTile.setStart();
 		startTile.reveal();
+
+		currentTile = startTile;
 
 		System.out.printf("Стартова позиция: %s %n", startTile.toString());
 	}
@@ -143,5 +165,60 @@ public class GameBoard {
 		}
 
 		return result;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public Tile getTile(int row, int col) {
+		if (row >= height || row < 0 || col >= width || col < 0) {
+			return null;
+		}
+
+		return board[row][col];
+	}
+
+	public Tile getCurrentTile() {
+		return currentTile;
+	}
+
+	public void setCurrentTile(Tile currentTile) {
+		this.currentTile.visit();
+		this.currentTile.clearCurrent();
+		this.currentTile = currentTile;
+		this.currentTile.setCurrent();
+	}
+
+	public Tile getFinishTile() {
+		return finishTile;
+	}
+
+	public int getDisposals() {
+		return disposals;
+	}
+
+	public int getProbes() {
+		return probes;
+	}
+
+	public void decDisposals() {
+		this.disposals--;
+	}
+
+	public void decProbes() {
+		this.probes--;
+	}
+
+	public boolean isBoom() {
+		return boom;
+	}
+
+	public void boom() {
+		this.boom = true;
 	}
 }

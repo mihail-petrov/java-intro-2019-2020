@@ -12,26 +12,16 @@ public abstract class Human {
 	protected String lastName;
 	protected int age;
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
 	public abstract boolean load(String dataLine);
+
+	public abstract boolean match(String queryParams);
 
 	@Override
 	public String toString() {
 		return String.format("%s %s, възраст: %d", firstName, lastName, age);
 	}
 
-	protected Map<String, String> parseLine(String dataLine) {
+	public Map<String, String> parseLine(String dataLine) {
 		Map<String, String> partsCollection = new HashMap<>();
 
 		String[] parts = dataLine.split("@");

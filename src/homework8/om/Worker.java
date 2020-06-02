@@ -7,8 +7,32 @@ public class Worker extends Citizen {
 
 	private int salary;
 
-	public int getSalary() {
-		return salary;
+	@Override
+	protected char getType() {
+		return Citizen.TYPE_WORKER;
+	}
+
+	@Override
+	public boolean match(String queryParams) {
+		String[] parts = queryParams.split(SPECIAL_PROPERTY_DELIMITER);
+
+		if (super.match(parts[0])) {
+			if (parts.length == 2) {
+				Map<String, String> specialParams = parseLine(parts[1]);
+
+				if (specialParams.containsKey(KEY_SALARY)) {
+					if (salary != Integer.parseInt(specialParams.get(KEY_SALARY))) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

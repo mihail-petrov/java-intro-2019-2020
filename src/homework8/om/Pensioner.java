@@ -1,12 +1,38 @@
 package homework8.om;
 
+import java.util.Map;
+
 public class Pensioner extends Citizen {
 	protected static final String KEY_PENSION  = "PENSION";
 
 	private int pension;
 
-	public int getPension() {
-		return pension;
+	@Override
+	protected char getType() {
+		return Citizen.TYPE_PENSIONER;
+	}
+
+	@Override
+	public boolean match(String queryParams) {
+		String[] parts = queryParams.split(SPECIAL_PROPERTY_DELIMITER);
+
+		if (super.match(parts[0])) {
+			if (parts.length == 2) {
+				Map<String, String> specialParams = parseLine(parts[1]);
+
+				if (specialParams.containsKey(KEY_PENSION)) {
+					if (pension != Integer.parseInt(specialParams.get(KEY_PENSION))) {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

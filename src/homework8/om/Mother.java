@@ -2,7 +2,6 @@ package homework8.om;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Mother extends Citizen {
 	protected static final String KID_LINE_START  = "{KID}=[";
@@ -10,9 +9,38 @@ public class Mother extends Citizen {
 
 	private final List<Child> children = new ArrayList<>();
 
-	public List<Child> getChildren() {
-		return this.children;
+	@Override
+	protected char getType() {
+		return Citizen.TYPE_MOTHER;
 	}
+
+	@Override
+	public boolean match(String queryParams) {
+		String[] parts = queryParams.split(SPECIAL_PROPERTY_DELIMITER);
+
+		if (super.match(parts[0])) {
+			if (parts.length == 2) {
+				if (!parts[1].startsWith(KID_LINE_START) || !parts[1].endsWith(KID_LINE_END)) {
+					return false;
+				}
+
+				String cleanKidPart = parts[1].substring(7, parts[1].length() -1);
+
+				for (Child child: children) {
+					if (child.match(cleanKidPart)) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
 
 	@Override
 	public boolean load(String dataLine) {
@@ -45,12 +73,11 @@ public class Mother extends Citizen {
 		return false;
 	}
 
-
 	@Override
 	public String toString() {
 		String result = String.format("[Майка]: %s", super.toString());
 
-		if (children.size() > 0) {
+		if (!children.isEmpty()) {
 			result += ", деца: {";
 
 			for (Child child: children) {

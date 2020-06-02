@@ -28,6 +28,31 @@ public class Child extends Human {
 	}
 
 	@Override
+	public boolean match(String queryParams) {
+		Map<String, String> mapParams = parseLine(queryParams);
+
+		if (mapParams.containsKey(KEY_KID_FNAME)) {
+			if (!firstName.equals(mapParams.get(KEY_KID_FNAME))) {
+				return false;
+			}
+		}
+
+		if (mapParams.containsKey(KEY_KID_LNAME)) {
+			if (!lastName.equals(mapParams.get(KEY_KID_LNAME))) {
+				return false;
+			}
+		}
+
+		if (mapParams.containsKey(KEY_KID_AGE)) {
+			if (age != Integer.parseInt(mapParams.get(KEY_KID_AGE))) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return String.format("[Дете]: %s", super.toString());
 	}

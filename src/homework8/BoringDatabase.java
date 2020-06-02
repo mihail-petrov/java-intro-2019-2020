@@ -5,13 +5,17 @@ import homework8.om.Mother;
 import homework8.om.Pensioner;
 import homework8.om.Worker;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class BoringDatabase {
-	private static List<Citizen> data = new ArrayList<>();
+	private static final String SELECT = "SELECT";
+
+	private static final List<Citizen> data = new ArrayList<>();
 
 	public static void loadData(String fileName) throws FileNotFoundException {
 		System.out.printf("Зареждане на данни от файл: %s ... %n", fileName);
@@ -49,6 +53,8 @@ public class BoringDatabase {
 			}
 		}
 
+		scanner.close();
+
 		System.out.printf("Заредени са %d записи.%n", data.size());
 	}
 
@@ -61,5 +67,46 @@ public class BoringDatabase {
 			case "{TYPE}=[M]": return Citizen.TYPE_MOTHER;
 			default: return 'U';
 		}
+	}
+
+	public static void doQuery(String query) {
+		if (query.length() < 6 || !query.startsWith(SELECT)) {
+			System.out.printf("Невалидна заявка: %s %n", query);
+			return;
+		}
+
+		String queryParams = query.substring(6);
+
+		List<Citizen> resultList = new ArrayList<>();
+
+		if ("".equals(queryParams)) {
+			resultList.addAll(data);
+		} else {
+			resultList = filterList(queryParams);
+		}
+
+		printResult(resultList);
+	}
+
+	private static List<Citizen> filterList(String queryParams) {
+		List<Citizen> resultList = new ArrayList<>();
+
+		for (Citizen citizen: data) {
+			if (citizen.match(queryParams)) {
+				resultList.add(citizen);
+			}
+		}
+
+		return resultList;
+	}
+
+	private static void printResult(List<Citizen> resultList) {
+		System.out.println("Резултат:");
+		System.out.println("----------------------");
+		for (Citizen citizen: resultList) {
+			System.out.println(citizen);
+		}
+		System.out.println("----------------------");
+		System.out.println();
 	}
 }

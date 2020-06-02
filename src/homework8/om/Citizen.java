@@ -23,44 +23,44 @@ public abstract class Citizen extends Human {
 	public boolean match(String queryParams) {
 		Map<String, String> mapParams = parseLine(queryParams);
 
-		if (mapParams.containsKey(Citizen.KEY_TYPE)) {
-			if (getType() != mapParams.get(Citizen.KEY_TYPE).charAt(0)) {
+		if (mapParams.containsKey(KEY_TYPE)) {
+			if (getType() != mapParams.get(KEY_TYPE).charAt(0)) {
 				return false;
 			}
 		}
 
-		if (mapParams.containsKey(Citizen.KEY_FNAME)) {
-			if (!firstName.equals(mapParams.get(Citizen.KEY_FNAME))) {
+		if (mapParams.containsKey(KEY_FNAME)) {
+			if (!firstName.equals(mapParams.get(KEY_FNAME))) {
 				return false;
 			}
 		}
 
-		if (mapParams.containsKey(Citizen.KEY_LNAME)) {
-			if (!lastName.equals(mapParams.get(Citizen.KEY_LNAME))) {
+		if (mapParams.containsKey(KEY_LNAME)) {
+			if (!lastName.equals(mapParams.get(KEY_LNAME))) {
 				return false;
 			}
 		}
 
-		if (mapParams.containsKey(Citizen.KEY_AGE)) {
-			if (age != Integer.parseInt(mapParams.get(Citizen.KEY_AGE))) {
+		if (mapParams.containsKey(KEY_AGE)) {
+			if (age != Integer.parseInt(mapParams.get(KEY_AGE))) {
 				return false;
 			}
 		}
 
-		if (mapParams.containsKey(Citizen.KEY_ADDRESS)) {
-			if (!address.equals(mapParams.get(Citizen.KEY_ADDRESS))) {
+		if (mapParams.containsKey(KEY_ADDRESS)) {
+			if (!address.equals(mapParams.get(KEY_ADDRESS))) {
 				return false;
 			}
 		}
 
-		if (mapParams.containsKey(Citizen.KEY_PHONE)) {
-			if (!phone.equals(mapParams.get(Citizen.KEY_PHONE))) {
+		if (mapParams.containsKey(KEY_PHONE)) {
+			if (!phone.equals(mapParams.get(KEY_PHONE))) {
 				return false;
 			}
 		}
 
-		if (mapParams.containsKey(Citizen.KEY_GENDER)) {
-			if (gender != mapParams.get(Citizen.KEY_GENDER).charAt(0)) {
+		if (mapParams.containsKey(KEY_GENDER)) {
+			if (gender != mapParams.get(KEY_GENDER).charAt(0)) {
 				return false;
 			}
 		}

@@ -24,6 +24,8 @@ public abstract class Human {
 		return age;
 	}
 
+	public abstract boolean load(String dataLine);
+
 	@Override
 	public String toString() {
 		return String.format("%s %s, възраст: %d", firstName, lastName, age);

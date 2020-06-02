@@ -1,15 +1,34 @@
 package homework8.om;
 
 public class Pensioner extends Citizen {
-	private int pension;
+	protected static final String KEY_PENSION  = "PENSION";
 
-	@Override
-	public boolean load(String dataLine) {
-		return super.load(dataLine);
-	}
+	private int pension;
 
 	public int getPension() {
 		return pension;
+	}
+
+	@Override
+	public boolean load(String dataLine) {
+		String[] parts = dataLine.split(SPECIAL_PROPERTY_DELIMITER);
+
+		if (super.load(parts[0])) {
+			if (parts.length == 2) {
+				String specialValue = parseSpecialProperty(KEY_PENSION, parts[1]);
+
+				if (specialValue != null) {
+					this.pension = Integer.parseInt(specialValue);
+				} else {
+					System.err.println("Липсва PENSION");
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

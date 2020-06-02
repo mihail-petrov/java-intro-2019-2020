@@ -10,11 +10,13 @@ public abstract class Citizen extends Human {
 	protected static final String KEY_ADDRESS  = "ADDRESS";
 	protected static final String KEY_PHONE    = "PHONE";
 	protected static final String KEY_GENDER   = "SEX";
+	protected static final String SPECIAL_PROPERTY_DELIMITER = "\\@\\{SPECIAL_PROPERTY\\}::";
 
 	protected String address;
 	protected String phone;
 	protected char gender;
 
+	@Override
 	public boolean load(String dataLine) {
 		Map<String, String> parts = parseLine(dataLine);
 
@@ -26,6 +28,12 @@ public abstract class Citizen extends Human {
 		gender    = parts.get(KEY_GENDER).charAt(0);
 
 		return true;
+	}
+
+	protected String parseSpecialProperty(String key, String part) {
+		Map<String, String> specialPropertiesMap = parseLine(part);
+
+		return specialPropertiesMap.get(key);
 	}
 
 	public String getAddress() {

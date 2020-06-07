@@ -96,4 +96,7 @@
 
 ## Упражнение 10
 
-- TBD
+- Пакети(packages) в Java
+- Изключения(Exceptions) в Java
+- Конструкция try-catch блок в Java
+- Въпроси
